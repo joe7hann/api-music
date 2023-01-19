@@ -37,3 +37,13 @@ model Song {
 
   @@map("songs")
 }
+
+model Playlist {
+  id      Int    @id @default(autoincrement())
+  name    String
+  user_id Int
+
+  // relations
+
+  @@map("playlists")
+}
