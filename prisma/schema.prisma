@@ -51,9 +51,9 @@ model Playlist {
   updated_at DateTime @updatedAt
 
   // relations
-  author User @relation(fields: [authorId], references: [id])
+  author   User   @relation(fields: [authorId], references: [id])
   authorId Int
-  songs Song[]
+  songs    Song[]
 
   @@map("playlists")
 }
