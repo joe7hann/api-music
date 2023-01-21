@@ -15,9 +15,10 @@ model User {
   name         String
   email        String    @unique
   password     String
-  last_session DateTime
+  last_session DateTime?
   update_at    DateTime  @updatedAt
   date_born    DateTime?
+  created_at   DateTime  @default(now())
 
   // relations
 
@@ -25,13 +26,16 @@ model User {
 }
 
 model Song {
-  id       Int       @id @default(autoincrement())
-  name     String
-  artist   String
-  album    String
-  year     Int
-  genre    String
-  duration Int
+  id         Int      @id @default(autoincrement())
+  name       String
+  artist     String
+  album      String
+  year       Int
+  genre      String
+  duration   Int
+  private    Boolean  @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   // relations
 
@@ -39,9 +43,10 @@ model Song {
 }
 
 model Playlist {
-  id      Int    @id @default(autoincrement())
-  name    String
-  user_id Int
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   // relations
 
