@@ -41,3 +41,14 @@ model Song {
 
   @@map("songs")
 }
+
+model Playlist {
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // relations
+
+  @@map("playlists")
+}
