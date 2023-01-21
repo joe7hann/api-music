@@ -21,6 +21,7 @@ model User {
   created_at   DateTime  @default(now())
 
   // relations
+  playlists Playlist[]
 
   @@map("users")
 }
@@ -38,6 +39,7 @@ model Song {
   updated_at DateTime @updatedAt
 
   // relations
+  playlist Playlist[]
 
   @@map("songs")
 }
@@ -49,6 +51,9 @@ model Playlist {
   updated_at DateTime @updatedAt
 
   // relations
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
+  songs Song[]
 
   @@map("playlists")
 }
