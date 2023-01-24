@@ -4,5 +4,5 @@ app.get("/", (req, res) =>{
     res.send("APIREST music");
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT
 app.listen(PORT, ()=> console.log(`Server started at http://localhost:${PORT}`));
