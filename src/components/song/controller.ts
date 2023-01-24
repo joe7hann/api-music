@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+const jwt = require('jsonwebtoken');
 
 const prisma = new PrismaClient();
 
@@ -12,7 +13,7 @@ export const createSong = async (req: Request, res: Response): Promise<void> => 
 
         res.status(201).json({
             ok: true,
-            message: "Song created successfully",
+            message: `Song created successfully`,
             data: newSong
         });
     } catch (error) {
@@ -24,16 +25,33 @@ export const createSong = async (req: Request, res: Response): Promise<void> => 
 };
 
 
-// Show all songs
-export const getAllSongs = async (_req: Request, res: Response): Promise<void> => {
+// Show all songs (Non and user logged)
+export const getAllSongs = async (req: Request, res: Response): Promise<void> => {
     try {
-        
-        const songs = await prisma.song.findMany({});
+        const { authorization } = req.headers;
+        if (!authorization) {
+            const songsInPublic = await prisma.song.findMany({ where: { published: true } });
+            res.status(200).json({
+                ok: true,
+                message: `Login to see private songs`,
+                data: songsInPublic,
+            });
 
-        res.status(200).json({
-            ok: true,
-            data: songs,
-        });
+        } else {
+            const token = authorization.replace('Bearer ', '');
+            const { id } = jwt.verify(token, process.env.JWT_SECRET);
+            const user = await prisma.user.findUnique({ where: { id } })
+            if(user){
+                const songs = await prisma.song.findMany({});
+                res.status(200).json({
+                    ok: true,
+                    data: songs,
+                });
+            } else{
+                res.status(401).send({ error: `Token invalid or expired` });
+            }
+        }
+
     } catch (error) {
         res.status(500).json({
             ok: false,
